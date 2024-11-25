@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    
+    <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
+<script src="https://files.bpcontent.cloud/2024/11/02/06/20241102063345-49R984BD.js"></script>
+    
+<script>
+    window.botpressWebChat.onEvent(
+      (event) => {
+        if (event.type === "MESSAGE.RECEIVED") {
+          console.log('A new message was received!');
+          if (event.value.payload.text === "You can choose a resume") {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.addEventListener('change', (event) => {
+              const file = event.target.files[0];
+              console.log('Selected file:', file);
+              const reader = new FileReader();
+              reader.onload = async function (event) {
+                const fileContent = event.target.result;
+                const title = file.name;
+                console.log('File content:', fileContent);
+                console.log('File name:', title);
+                window.botpressWebChat.sendPayload({
+                  type: 'trigger',
+                  payload: {
+                    title: title,
+                    content: fileContent,
+                  },
+                });
+              };
+              reader.readAsText(file);
+            });
+            fileInput.click();
+          }
+        }
+      }
+    );
+  </script>
+
+</body>
+</html>
